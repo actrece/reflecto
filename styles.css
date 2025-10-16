@@ -1,71 +1,335 @@
-/* Flowfest Color Palette & Typography */
-:root {
-    --color-beige: #FAF4E7;
-    --color-pink: #EC4899;
-    --color-orange: #F97316;
-    --color-dark: #374151;
-    --color-outline: #1f2937;
-    --color-purple: #8b5cf6;
-    --color-yellow: #FCD34D;
+/* --- 0. General and Reset Styles --- */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
 }
 
-* { box-sizing: border-box; }
+/* --- 1. Header Styling (Logo and Top Bar) --- */
+.header {
+    background-color: #f77066; 
+    padding: 10px 20px;
+    border-bottom: 5px solid black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--color-beige);
-    min-height: 100vh;
+.logo {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 0;
-    margin: 0;
-    overflow-x: hidden;
+    color: white;
 }
 
-h1, h2 { font-family: 'Bangers', cursive; text-transform: uppercase; }
+.logo-icon {
+    font-size: 30px;
+    margin-right: 10px;
+}
 
-.flowfest-h-outline { color: var(--color-pink); text-shadow: 2px 2px 0 var(--color-outline); letter-spacing: 1px; }
-.flowfest-h-orange-outline { color: var(--color-orange); text-shadow: 2px 2px 0 var(--color-outline); letter-spacing: 1px; }
+.logo h1 {
+    font-family: 'Bangers', cursive;
+    font-size: 40px;
+    margin: 0;
+    letter-spacing: 2px;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+}
 
-#intro-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-color: var(--color-beige); z-index: 1000; }
+/* --- 2. Navigation Bar Styling --- */
+.navbar {
+    background-color: #fefefe;
+    display: flex;
+    justify-content: flex-start;
+    padding: 15px 20px;
+    gap: 10px;
+    border-bottom: 2px solid #ddd;
+    flex-wrap: wrap; 
+}
 
-.typing-output-text { font-family: 'Bangers', cursive; text-transform: uppercase; color: white; text-shadow: 2px 2px 0 var(--color-outline); letter-spacing: 1px; font-size: 36px; }
+.nav-button {
+    padding: 10px 15px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: box-shadow 0.2s, transform 0.2s;
+    /* Default non-active style based on the images */
+    background-color: #ffeb95; 
+    box-shadow: 3px 3px 0 #000;
+}
 
-.typing-cursor::after { content: '|'; animation: blink 0.7s infinite; }
+.nav-button:hover:not(.active) {
+    box-shadow: 1px 1px 0 #000;
+    transform: translate(2px, 2px);
+}
 
-@keyframes blink { 50% { opacity: 0; } }
+/* Active button style (The JavaScript will explicitly set the background color) */
+.nav-button.active {
+    box-shadow: none;
+    transform: translate(0, 0);
+    /* Initial state color, which JS will manage */
+    background-color: #ff8c42; 
+}
 
-.deco-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -10; }
-.retro-arc { position: absolute; width: 300px; height: 300px; border-radius: 0 0 0 100%; }
-.retro-arc-bl { bottom: -150px; left: -150px; transform: rotate(-90deg); box-shadow: 30px 30px 0 var(--color-pink); }
-.retro-arc-tr { top: -150px; right: -150px; transform: rotate(90deg); box-shadow: 30px 30px 0 var(--color-pink); }
 
-#app { width: 100%; max-width: 800px; padding-bottom: 50px; }
+/* --- 3. Main Content Area & App Containers --- */
+.content-area {
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+}
 
-header { background-color: var(--color-pink); padding: 20px; border-bottom: 4px solid var(--color-outline); position: sticky; top: 0; z-index: 50; }
+/* Base styling for all main content boxes */
+.app-view {
+    background-color: #fff;
+    border: 3px solid #000;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 900px;
+    width: 100%;
+    box-shadow: 5px 5px 0 #000;
+    display: block; 
+}
 
-nav { display: flex; gap: 8px; padding: 15px 10px; background-color: rgba(255, 255, 255, 0.8); position: sticky; top: 100px; border-bottom: 2px solid var(--color-outline); z-index: 40; }
+/* View switching mechanism: Only display the active view */
+.hidden-view {
+    display: none !important;
+}
 
-nav button { padding: 10px 18px; border: 3px solid var(--color-outline); border-radius: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; background: var(--color-yellow); color: var(--color-outline); box-shadow: 3px 3px 0 var(--color-outline); }
-nav button.active { background: var(--color-orange); color: white; box-shadow: 4px 4px 0 var(--color-outline); transform: translateY(-2px); }
+.active-view {
+    display: block !important;
+}
 
-.content-area { padding: 30px 20px; }
+/* General Title Styles (used for Journal, Habits, Dashboard, Letters) */
+.app-view-title {
+    font-family: 'Bangers', cursive;
+    font-size: 50px;
+    color: #f77066;
+    margin: 0 0 5px 0;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+    letter-spacing: 1px;
+}
 
-.tab-content { display: none; }
-.tab-content.active { display: block; animation: slideIn 0.3s ease-out; }
+/* --- 4. MOOD TRACKING STYLES (mood-box) --- */
+.mood-title { 
+    font-family: 'Roboto Slab', serif;
+    font-size: 36px;
+    color: #f77066;
+    margin-bottom: 5px;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+.mood-subtitle { font-size: 18px; color: #333; margin-bottom: 30px; }
+.mood-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+}
+.mood-item {
+    padding: 15px;
+    border: 3px solid #000;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 5px 5px 0 #000;
+    transition: transform 0.1s, box-shadow 0.1s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 140px;
+    background-color: #ffeb95; /* yellow-bg */
+}
+.mood-item:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 #000; }
+.mood-emoji { font-size: 50px; margin-bottom: 10px; }
+.mood-label { font-weight: bold; font-size: 16px; margin: 0; padding: 5px 0; border-radius: 5px; }
+.selected-item { border: 5px solid #000; transform: translate(0); box-shadow: none; }
+.thoughtful .mood-label { color: #3c9c61; }
+.gray-bg { background-color: #ccc; }
+.disabled-item { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
 
-@keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-.card { background: white; border-radius: 20px; padding: 30px; border: 4px solid var(--color-outline); box-shadow: 6px 6px 0 var(--color-outline); margin-bottom: 30px; }
+/* --- 5. JOURNAL STYLES (journal-box) --- */
+.journal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.journal-subtitle { font-size: 18px; color: #333; margin-bottom: 25px; }
+.new-prompt-button {
+    padding: 10px 15px;
+    background-color: #ff8c42; /* Orange for New Prompt */
+    color: black;
+    border: 3px solid #000;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #000;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+.new-prompt-button:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0 #000; }
+.prompt-display {
+    background-color: #ffb861; /* Orange/Yellow for Prompt */
+    border: 3px solid #000;
+    border-radius: 10px;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    box-shadow: 3px 3px 0 #000;
+}
+.journal-textarea {
+    width: calc(100% - 6px);
+    height: 250px;
+    padding: 15px;
+    border: 3px solid #000;
+    border-radius: 10px;
+    font-size: 16px;
+    resize: vertical;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+}
+/* Main CTA Button Style (used for Save Entry, Generate Story, Send to Future) */
+.save-entry-button, .generate-story-button, .send-to-future-button { 
+    width: 100%;
+    padding: 20px 0;
+    background-color: #ff57a0; /* Bright Pink */
+    color: white;
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    border: 3px solid #000;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 5px 5px 0 #000;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+.save-entry-button:hover, .generate-story-button:hover, .send-to-future-button:hover { 
+    transform: translate(2px, 2px); 
+    box-shadow: 3px 3px 0 #000; 
+}
 
-.mood-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 15px; margin-top: 20px; }
-.mood-btn { padding: 20px 10px; border: 3px solid var(--color-outline); border-radius: 15px; background: #f3f4f6; cursor: pointer; transition: all 0.2s ease; text-align: center; box-shadow: 3px 3px 0 var(--color-outline); }
-.mood-btn.active { color: white; background: var(--color-orange); }
 
-.prompt-box { background: var(--color-yellow); padding: 20px; border-radius: 15px; border: 3px solid var(--color-outline); box-shadow: 4px 4px 0 var(--color-outline); margin-bottom: 25px; }
+/* --- 6. AI STORY STYLES (ai-story-box) --- */
+.ai-story-box { text-align: center; }
+.ai-story-subtitle { font-size: 18px; color: #333; margin-bottom: 40px; }
+.mood-display-banner {
+    background-color: #794ff2; /* Vibrant Purple */
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 20px;
+    margin: 20px auto 40px auto;
+    max-width: 500px;
+    border: 3px solid #000;
+    border-radius: 10px;
+    box-shadow: 5px 5px 0 #000;
+    text-align: left;
+}
+.generate-story-button { 
+    width: 80%;
+    max-width: 600px; 
+    margin-bottom: 20px;
+}
 
-textarea { width: 100%; height: 200px; padding: 15px; border: 3px solid var(--color-outline); border-radius: 15px; font-size: 16px; resize: none; transition: border 0.3s ease; box-shadow: 2px 2px 0 var(--color-outline); }
-textarea:focus { border-color: var(--color-orange); box-shadow: 4px 4px 0 var(--color-orange); }
 
-.btn-primary { width:
+/* --- 7. HABITS STYLES (habits-box) --- */
+.habits-subtitle { font-size: 18px; color: #333; margin-bottom: 30px; }
+.habit-list { display: flex; flex-direction: column; gap: 20px; }
+.habit-item {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+    padding: 20px 25px;
+    background-color: #ffb861; /* Orange for Habits buttons */
+    border: 3px solid #000;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 5px 5px 0 #000;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+.habit-item:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 #000; }
+.habit-emoji { font-size: 45px; margin-right: 20px; line-height: 1; }
+.habit-item.pink-icon .habit-emoji { color: #ff57a0; }
+.habit-details { flex-grow: 1; }
+.habit-name { font-weight: bold; font-size: 20px; margin: 0 0 4px 0; }
+.habit-desc { font-size: 16px; color: #555; margin: 0; }
+
+
+/* --- 8. DASHBOARD STYLES (dashboard-box) --- */
+.dashboard-subtitle { font-size: 18px; color: #333; margin-bottom: 30px; }
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.metric-card {
+    border: 3px solid #000;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    box-shadow: 5px 5px 0 #000;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.orange-bg { background-color: #ff8c42; }
+.purple-bg { background-color: #794ff2; }
+.metric-label { font-size: 18px; font-weight: bold; margin: 0; }
+.metric-value { font-size: 60px; font-weight: 900; line-height: 1; margin: 5px 0; }
+.metric-unit { font-size: 18px; font-weight: bold; margin: 0; }
+.recent-moods-box { border: 3px solid #000; border-radius: 12px; padding: 20px; min-height: 150px; }
+.recent-moods-title { font-size: 22px; font-weight: bold; margin: 0 0 15px 0; }
+.mood-history-item {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 15px;
+    padding: 10px;
+    background-color: #ffeb95;
+    border: 2px solid #000;
+    border-radius: 8px;
+}
+.history-emoji { font-size: 30px; line-height: 1; }
+.history-date { font-size: 12px; margin-top: 5px; font-weight: bold; }
+
+
+/* --- 9. LETTERS STYLES (letters-box) --- */
+.letters-subtitle { font-size: 18px; color: #333; margin-bottom: 30px; }
+.date-input-section label { font-weight: bold; font-size: 18px; display: block; margin-bottom: 10px; }
+.date-input-container {
+    display: flex;
+    align-items: center;
+    border: 3px solid #000;
+    border-radius: 8px;
+    padding: 10px;
+    max-width: 300px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 3px 3px 0 #000;
+}
+.date-input { border: none; outline: none; flex-grow: 1; font-size: 16px; padding: 0; }
+.calendar-icon { font-size: 24px; cursor: pointer; margin-left: 10px; }
+.letter-textarea {
+    width: calc(100% - 6px);
+    height: 300px;
+    padding: 15px;
+    border: 3px solid #000;
+    border-radius: 10px;
+    font-size: 16px;
+    resize: vertical;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+}
+
+/* --- 10. Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .navbar { justify-content: space-around; }
+    .nav-button { flex-grow: 1; }
+    .mood-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .metrics-grid {
+        grid-template-columns: 1fr; /* Stack dashboard cards */
+    }
+}
