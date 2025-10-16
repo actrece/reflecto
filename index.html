@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>REFLECTO - Interactive Prototype</title>
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bangers&display=swap">
 
@@ -63,7 +64,7 @@
         font-weight: bold;
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 8px;
         transition: box-shadow 0.2s, transform 0.2s;
         background-color: #ffeb95; 
         box-shadow: 3px 3px 0 #000;
@@ -110,11 +111,11 @@
     }
 
     /* --- Mood Section --- */
-    .mood-title { font-family: 'Roboto Slab', serif; font-size: 36px; color: #f77066; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000; }
+    .mood-title { font-family: 'Roboto Slab', serif; font-size: 36px; color: #f77066; margin-bottom: 5px; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000; }
     .mood-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; }
-    .mood-item { padding: 15px; border: 3px solid #000; border-radius: 12px; text-align: center; box-shadow: 5px 5px 0 #000; background-color: #ffeb95; }
+    .mood-item { padding: 15px; border: 3px solid #000; border-radius: 12px; text-align: center; box-shadow: 5px 5px 0 #000; background-color: #ffeb95; cursor: pointer; }
     .mood-emoji { font-size: 50px; }
-    .mood-label { font-weight: bold; }
+    .mood-label { font-weight: bold; margin-top: 8px; }
 
     /* --- Journal Section --- */
     .journal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -237,29 +238,66 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const navButtons = document.querySelectorAll('.nav-button');
-        const appViews = document.querySelectorAll('.app-view');
+        const navButtons = Array.from(document.querySelectorAll('.nav-button'));
+        const appViews = Array.from(document.querySelectorAll('.app-view'));
         const ACTIVE_COLOR = '#ff8c42';
         const NON_ACTIVE_COLOR = '#ffeb95';
 
-        const updateNavColors = () => {
+        // Initialize nav button colors and view visibility on load
+        const initialize = () => {
+            // Ensure only one view is active on load: the one that has .active-view
+            let foundActive = false;
+            appViews.forEach(view => {
+                if (view.classList.contains('active-view') && !foundActive) {
+                    view.classList.remove('hidden-view');
+                    view.classList.add('active-view');
+                    foundActive = true;
+                } else {
+                    view.classList.remove('active-view');
+                    view.classList.add('hidden-view');
+                }
+            });
+
+            // Sync nav button background colors with their .active class
             navButtons.forEach(btn => {
                 btn.style.backgroundColor = btn.classList.contains('active') ? ACTIVE_COLOR : NON_ACTIVE_COLOR;
             });
         };
 
-        updateNavColors();
+        initialize();
 
+        // Click behaviour for nav
         navButtons.forEach(button => {
             button.addEventListener('click', (event) => {
-                const targetViewId = event.currentTarget.getAttribute('data-view');
+                const btn = event.currentTarget;
+                const targetViewId = btn.getAttribute('data-view');
+                const targetView = document.getElementById(targetViewId);
 
-                navButtons.forEach(btn => btn.classList.remove('active'));
-                event.currentTarget.classList.add('active');
-                updateNavColors();
+                // Remove 'active' state from all nav buttons and apply to clicked
+                navButtons.forEach(b => {
+                    b.classList.remove('active');
+                    b.style.backgroundColor = NON_ACTIVE_COLOR;
+                });
+                btn.classList.add('active');
+                btn.style.backgroundColor = ACTIVE_COLOR;
 
-                appViews.forEach(view => view.classList.add('hidden-view'));
-                document.getElementById(targetViewId).classList.remove('hidden-view');
+                // Hide all views and remove their active-view class
+                appViews.forEach(view => {
+                    view.classList.remove('active-view');
+                    view.classList.add('hidden-view');
+                });
+
+                // Show the selected view (guard against invalid ids)
+                if (targetView) {
+                    targetView.classList.remove('hidden-view');
+                    targetView.classList.add('active-view');
+                } else {
+                    // (Optional) fallback: show the first view if target missing
+                    if (appViews.length) {
+                        appViews[0].classList.remove('hidden-view');
+                        appViews[0].classList.add('active-view');
+                    }
+                }
             });
         });
     });
