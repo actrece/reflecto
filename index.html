@@ -4,9 +4,171 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REFLECTO - Interactive Prototype</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bangers&display=swap">
+
+    <style>
+    /* --- 0. General and Reset Styles --- */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+
+    /* --- 1. Header Styling --- */
+    .header {
+        background-color: #f77066; 
+        padding: 10px 20px;
+        border-bottom: 5px solid black;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        color: white;
+    }
+
+    .logo-icon {
+        font-size: 30px;
+        margin-right: 10px;
+    }
+
+    .logo h1 {
+        font-family: 'Bangers', cursive;
+        font-size: 40px;
+        margin: 0;
+        letter-spacing: 2px;
+        text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+    }
+
+    /* --- 2. Navigation Bar Styling --- */
+    .navbar {
+        background-color: #fefefe;
+        display: flex;
+        justify-content: flex-start;
+        padding: 15px 20px;
+        gap: 10px;
+        border-bottom: 2px solid #ddd;
+        flex-wrap: wrap; 
+    }
+
+    .nav-button {
+        padding: 10px 15px;
+        border: 2px solid #000;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: box-shadow 0.2s, transform 0.2s;
+        background-color: #ffeb95; 
+        box-shadow: 3px 3px 0 #000;
+    }
+
+    .nav-button:hover:not(.active) {
+        box-shadow: 1px 1px 0 #000;
+        transform: translate(2px, 2px);
+    }
+
+    .nav-button.active {
+        background-color: #ff8c42; 
+        box-shadow: none;
+        transform: translate(0, 0);
+    }
+
+    /* --- 3. Main Content Area --- */
+    .content-area {
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .app-view {
+        background-color: #fff;
+        border: 3px solid #000;
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 900px;
+        width: 100%;
+        box-shadow: 5px 5px 0 #000;
+        display: block; 
+    }
+
+    .hidden-view { display: none !important; }
+    .active-view { display: block !important; }
+
+    .app-view-title {
+        font-family: 'Bangers', cursive;
+        font-size: 50px;
+        color: #f77066;
+        margin: 0 0 5px 0;
+        text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+    }
+
+    /* --- Mood Section --- */
+    .mood-title { font-family: 'Roboto Slab', serif; font-size: 36px; color: #f77066; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000; }
+    .mood-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; }
+    .mood-item { padding: 15px; border: 3px solid #000; border-radius: 12px; text-align: center; box-shadow: 5px 5px 0 #000; background-color: #ffeb95; }
+    .mood-emoji { font-size: 50px; }
+    .mood-label { font-weight: bold; }
+
+    /* --- Journal Section --- */
+    .journal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .new-prompt-button {
+        padding: 10px 15px;
+        background-color: #ff8c42;
+        border: 3px solid #000;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 3px 3px 0 #000;
+    }
+
+    .prompt-display {
+        background-color: #ffb861;
+        border: 3px solid #000;
+        border-radius: 10px;
+        padding: 15px 20px;
+        font-weight: bold;
+        margin-bottom: 25px;
+        box-shadow: 3px 3px 0 #000;
+    }
+
+    .journal-textarea {
+        width: 100%;
+        height: 250px;
+        padding: 15px;
+        border: 3px solid #000;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        font-size: 16px;
+    }
+
+    .save-entry-button {
+        width: 100%;
+        padding: 20px 0;
+        background-color: #ff57a0;
+        color: white;
+        font-size: 24px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        border: 3px solid #000;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 5px 5px 0 #000;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+        .navbar { justify-content: space-around; }
+        .nav-button { flex-grow: 1; }
+        .mood-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    </style>
 </head>
 <body>
 
@@ -18,102 +180,90 @@
     </header>
 
     <nav class="navbar">
-        <button class="nav-button" data-view="mood-view"><span>&#129322;</span> Mood</button>
-        <button class="nav-button active" data-view="journal-view"><span>&#128214;</span> Journal</button>
-        <button class="nav-button" data-view="ai-story-view"><span>&#10024;</span> AI Story</button>
-        <button class="nav-button" data-view="habits-view"><span>&#10003;</span> Habits</button>
-        <button class="nav-button" data-view="dashboard-view"><span>&#128202;</span> Dashboard</button>
-        <button class="nav-button" data-view="letters-view"><span>&#128196;</span> Letters</button>
+        <button class="nav-button" data-view="mood-view"><span>😊</span> Mood</button>
+        <button class="nav-button active" data-view="journal-view"><span>📖</span> Journal</button>
+        <button class="nav-button" data-view="ai-story-view"><span>✨</span> AI Story</button>
+        <button class="nav-button" data-view="habits-view"><span>✔️</span> Habits</button>
+        <button class="nav-button" data-view="dashboard-view"><span>📊</span> Dashboard</button>
+        <button class="nav-button" data-view="letters-view"><span>📄</span> Letters</button>
     </nav>
 
     <main class="content-area">
-        
-        <div id="mood-view" class="app-view mood-box hidden-view">
+
+        <div id="mood-view" class="app-view hidden-view">
             <h2 class="mood-title">HOW ARE YOU FEELING?</h2>
-            <p class="mood-subtitle">Pick the emoji that matches your mood</p>
             <div class="mood-grid">
-                <div class="mood-item yellow-bg"><span class="mood-emoji">😊</span><p class="mood-label">Happy</p></div>
-                <div class="mood-item yellow-bg"><span class="mood-emoji">😌</span><p class="mood-label">Calm</p></div>
-                <div class="mood-item yellow-bg"><span class="mood-emoji">😞</span><p class="mood-label">Sad</p></div>
-                <div class="mood-item yellow-bg selected-item"><span class="mood-emoji">😩</span><p class="mood-label">Stressed</p></div>
-                <div class="mood-item yellow-bg thoughtful"><span class="mood-emoji">🤔</span><p class="mood-label">Thoughtful</p></div>
-                <div class="mood-item gray-bg disabled-item"><span class="mood-emoji">😴</span></div>
+                <div class="mood-item"><span class="mood-emoji">😊</span><p class="mood-label">Happy</p></div>
+                <div class="mood-item"><span class="mood-emoji">😌</span><p class="mood-label">Calm</p></div>
+                <div class="mood-item"><span class="mood-emoji">😞</span><p class="mood-label">Sad</p></div>
+                <div class="mood-item"><span class="mood-emoji">😩</span><p class="mood-label">Stressed</p></div>
+                <div class="mood-item"><span class="mood-emoji">🤔</span><p class="mood-label">Thoughtful</p></div>
+                <div class="mood-item"><span class="mood-emoji">😴</span><p class="mood-label">Tired</p></div>
             </div>
         </div>
 
-        <div id="journal-view" class="app-view journal-box active-view">
+        <div id="journal-view" class="app-view active-view">
             <div class="journal-header">
-                <h2 class="app-view-title journal-title">DAILY JOURNAL</h2>
+                <h2 class="app-view-title">DAILY JOURNAL</h2>
                 <button class="new-prompt-button">New Prompt</button>
             </div>
-            <p class="journal-subtitle">Express your thoughts freely</p>
             <div class="prompt-display">What made you smile today?</div>
             <textarea class="journal-textarea" placeholder="Start writing your thoughts..."></textarea>
             <button class="save-entry-button">SAVE ENTRY</button>
         </div>
 
-        <div id="ai-story-view" class="app-view ai-story-box hidden-view">
-            <h2 class="app-view-title ai-story-title">AI MOOD-TO-STORY</h2>
-            <p class="ai-story-subtitle">Generate a personalized reflection based on your mood</p>
-            <div class="mood-display-banner">You are feeling: 😴 Tired</div>
-            <button class="generate-story-button">✨ GENERATE MY STORY</button>
+        <div id="ai-story-view" class="app-view hidden-view">
+            <h2 class="app-view-title">AI MOOD-TO-STORY</h2>
+            <p>Generate a personalized reflection based on your mood</p>
+            <button class="save-entry-button">✨ GENERATE MY STORY</button>
         </div>
 
-        <div id="habits-view" class="app-view habits-box hidden-view">
-            <h2 class="app-view-title habits-title">DAILY HABITS</h2>
-            <p class="habits-subtitle">Track your wellness routine</p>
-            <div class="habit-list">
-                <button class="habit-item">
-                    <span class="habit-emoji">💧</span>
-                    <div class="habit-details"><p class="habit-name">Water Intake</p><p class="habit-desc">Stay hydrated today</p></div>
-                </button>
-                <button class="habit-item">
-                    <span class="habit-emoji">🌙</span>
-                    <div class="habit-details"><p class="habit-name">Good Sleep</p><p class="habit-desc">8 hours of rest</p></div>
-                </button>
-                <button class="habit-item pink-icon">
-                    <span class="habit-emoji">💖</span>
-                    <div class="habit-details"><p class="habit-name">Gratitude Practice</p><p class="habit-desc">Count your blessings</p></div>
-                </button>
-            </div>
+        <div id="habits-view" class="app-view hidden-view">
+            <h2 class="app-view-title">DAILY HABITS</h2>
+            <p>Track your wellness routine</p>
         </div>
 
-        <div id="dashboard-view" class="app-view dashboard-box hidden-view">
-            <h2 class="app-view-title dashboard-title">WEEKLY REFLECTION</h2>
-            <p class="dashboard-subtitle">Your progress at a glance</p>
-            <div class="metrics-grid">
-                <div class="metric-card orange-bg">
-                    <p class="metric-label">Mood Streak</p><p class="metric-value">1</p><p class="metric-unit">days</p>
-                </div>
-                <div class="metric-card purple-bg">
-                    <p class="metric-label">Habits Completed</p><p class="metric-value">0/3</p>
-                </div>
-            </div>
-            <div class="recent-moods-box">
-                <h3 class="recent-moods-title">Recent Moods</h3>
-                <div class="mood-history-item">
-                    <span class="history-emoji">😥</span>
-                    <span class="history-date">10/16</span>
-                </div>
-            </div>
+        <div id="dashboard-view" class="app-view hidden-view">
+            <h2 class="app-view-title">WEEKLY REFLECTION</h2>
+            <p>Your progress at a glance</p>
         </div>
 
-        <div id="letters-view" class="app-view letters-box hidden-view">
-            <h2 class="app-view-title letters-title">FUTURE-SELF LETTERS</h2>
-            <p class="letters-subtitle">Write a letter to your future self</p>
-            <div class="date-input-section">
-                <label for="unlock-date">When should this unlock?</label>
-                <div class="date-input-container">
-                    <input type="text" id="unlock-date" placeholder="dd/mm/yyyy" class="date-input"/>
-                    <span class="calendar-icon">📅</span>
-                </div>
-            </div>
-            <textarea class="letter-textarea" placeholder="Dear future me..."></textarea>
-            <button class="send-to-future-button">✨ SEND TO FUTURE</button>
+        <div id="letters-view" class="app-view hidden-view">
+            <h2 class="app-view-title">FUTURE-SELF LETTERS</h2>
+            <p>Write a letter to your future self</p>
         </div>
-        
+
     </main>
 
-    <script src="app.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const navButtons = document.querySelectorAll('.nav-button');
+        const appViews = document.querySelectorAll('.app-view');
+        const ACTIVE_COLOR = '#ff8c42';
+        const NON_ACTIVE_COLOR = '#ffeb95';
+
+        const updateNavColors = () => {
+            navButtons.forEach(btn => {
+                btn.style.backgroundColor = btn.classList.contains('active') ? ACTIVE_COLOR : NON_ACTIVE_COLOR;
+            });
+        };
+
+        updateNavColors();
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const targetViewId = event.currentTarget.getAttribute('data-view');
+
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                event.currentTarget.classList.add('active');
+                updateNavColors();
+
+                appViews.forEach(view => view.classList.add('hidden-view'));
+                document.getElementById(targetViewId).classList.remove('hidden-view');
+            });
+        });
+    });
+    </script>
+
 </body>
 </html>
