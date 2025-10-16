@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reflecto - Your Mindful Companion</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- Link to external CSS (if separated) -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="p-0">
+    <!-- Retro Corner Decorations -->
+    <div class="deco-container">
+        <div class="retro-arc retro-arc-bl"></div>
+        <div class="retro-arc retro-arc-tr"></div>
+    </div>
+
+    <!-- Custom Message Box -->
+    <div id="messageBox"></div>
+
+    <!-- Intro Screen -->
+    <div id="intro-container">
+        <div class="max-w-md w-full p-4">
+            <div class="flex justify-center mb-6">
+                <div class="bg-yellow-400 p-3 rounded-full border-4 border-black shadow-lg text-5xl transform -translate-y-4">
+                    😊
+                </div>
+            </div>
+            <div class="flex justify-center">
+                <div id="chat-bubble" class="bg-orange-500 p-5 rounded-2xl shadow-xl border-4 border-black max-w-full transition-all duration-500">
+                    <p id="typing-output" class="typing-output-text text-white text-center min-h-[5rem] flex items-center justify-center"></p>
+                </div>
+            </div>
+            <div id="cta-area" class="mt-10 text-center hidden transition-opacity duration-1000 opacity-0">
+                <button id="startAppButton" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-10 rounded-xl border-4 border-black shadow-[6px_6px_0_var(--color-outline)] hover:shadow-[8px_8px_0_var(--color-outline)] transition duration-200 text-2xl">
+                    Start Reflection
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Content -->
+    <div id="app" style="display: none;">
+        <header>
+            <h1 class="flex items-center gap-3">
+                <span class="text-3xl transform -translate-y-1">🌞</span>
+                Reflecto
+            </h1>
+        </header>
+        <nav id="nav-tabs">
+            <button class="nav-btn active" data-tab="mood">😊 Mood</button>
+            <button class="nav-btn" data-tab="journal">📖 Journal</button>
+            <button class="nav-btn" data-tab="story">✨ AI Story</button>
+            <button class="nav-btn" data-tab="habits">✓ Habits</button>
+            <button class="nav-btn" data-tab="dashboard">📊 Dashboard</button>
+            <button class="nav-btn" data-tab="letters">✉️ Letters</button>
+        </nav>
+        <div class="content-area">
+            <!-- Mood Tab -->
+            <div class="tab-content active" id="mood">
+                <div class="card">
+                    <h2 class="flowfest-h-outline">How are you feeling?</h2>
+                    <p class="text-gray-600 mb-6">Pick the emoji that matches your mood</p>
+                    <div class="mood-grid">
+                        <button class="mood-btn" data-mood="Happy" style="color:#000000;"><span class="emoji">😊</span><span class="label">Happy</span></button>
+                        <button class="mood-btn" data-mood="Calm" style="color:#3b82f6;"><span class="emoji">😌</span><span class="label">Calm</span></button>
+                        <button class="mood-btn" data-mood="Sad" style="color:#8b5cf6;"><span class="emoji">😔</span><span class="label">Sad</span></button>
+                        <button class="mood-btn" data-mood="Stressed" style="color:#ef4444;"><span class="emoji">😤</span><span class="label">Stressed</span></button>
+                        <button class="mood-btn" data-mood="Thoughtful" style="color:#10b981;"><span class="emoji">🤔</span><span class="label">Thoughtful</span></button>
+                        <button class="mood-btn" data-mood="Tired" style="color:#64748b;"><span class="emoji">😴</span><span class="label">Tired</span></button>
+                    </div>
+                </div>
+            </div>
+            <!-- Journal Tab -->
+            <div class="tab-content" id="journal">
+                <div class="card">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="flowfest-h-outline">Daily Journal</h2>
+                        <button class="btn-secondary" onclick="changePrompt()">New Prompt</button>
+                    </div>
+                    <p class="text-gray-600 mb-6">Express your thoughts freely</p>
+                    <div class="prompt-box"><p id="journalPrompt">What made you smile today?</p></div>
+                    <textarea id="journalText" placeholder="Start writing your thoughts..."></textarea>
+                    <button class="btn-primary" onclick="saveJournal()">Save Entry</button>
+                </div>
+            </div>
+            <!-- AI Story Tab -->
+            <div class="tab-content" id="story">
+                <div class="card">
+                    <h2 class="flowfest-h-orange-outline">AI Mood-to-Story</h2>
+                    <p class="text-gray-600 mb-6">Generate a personalized reflection based on your mood</p>
+                    <div id="noMoodAlert" class="prompt-box bg-pink-300 border-pink-700 text-pink-900"><p style="color:white;">👈 Select your mood first in the Mood tab!</p></div>
+                    <div id="storyGenerator" style="display: none;">
+                        <div class="prompt-box bg-purple-300"><p id="currentMoodDisplay" style="color:white;"></p></div>
+                        <button class="btn-primary" onclick="generateStory()">✨ Generate My Story</button>
+                        <div id="storyOutput" style="display: none;" class="card mt-6">
+                            <h3 class="flowfest-h-orange-outline text-xl mb-4">Your Reflection Story</h3>
+                            <p id="storyText" class="text-gray-700"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Habits Tab -->
+            <div class="tab-content" id="habits">
+                <div class="card">
+                    <h2 class="flowfest-h-outline">Daily Habits</h2>
+                    <p class="text-gray-600 mb-6">Track your wellness routine</p>
+                    <div class="habit-item" data-habit="water" onclick="toggleHabit('water')">
+                        <div class="habit-info"><div class="habit-icon">💧</div><div class="habit-text"><h3>Water Intake</h3><p>Stay hydrated today</p></div></div>
+                        <div class="check-icon">✅</div>
+                    </div>
+                    <div class="habit-item" data-habit="sleep" onclick="toggleHabit('sleep')">
+                        <div class="habit-info"><div class="habit-icon">🌙</div><div class="habit-text"><h3>Good Sleep</h3><p>8 hours of rest</p></div></div>
+                        <div class="check-icon">✅</div>
+                    </div>
+                    <div class="habit-item" data-habit="gratitude" onclick="toggleHabit('gratitude')">
+                        <div class="habit-info"><div class="habit-icon">❤️</div><div class="habit-text"><h3>Gratitude Practice</h3><p>Count your blessings</p></div></div>
+                        <div class="check-icon">✅</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Dashboard Tab -->
+            <div class="tab-content" id="dashboard">
+                <div class="card">
+                    <h2 class="flowfest-h-orange-outline">Weekly Reflection</h2>
+                    <p class="text-gray-600 mb-6">Your progress at a glance</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                        <div class="stat-card streak"><h4>Mood Streak</h4><div class="number" id="streakCount">0</div><p>days</p></div>
+                        <div class="stat-card habits"><h4>Habits Completed</h4><div class="number" id="habitsCount">0/3</div></div>
+                    </div>
+                    <div class="card bg-gray-100 p-6 shadow-none">
+                        <h3 class="text-xl font-bold text-gray-700 mb-4">Recent Moods</h3>
+                        <div class="flex gap-3 overflow-x-auto p-2" id="moodList"><p class="text-gray-500">Start logging your moods to see trends!</p></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Letters Tab -->
+            <div class="tab-content" id="letters">
+                <div class="card">
+                    <h2 class="flowfest-h-outline">Future-Self Letters</h2>
+                    <p class="text-gray-600 mb-6">Write a letter to your future self</p>
+                    <label style="display: block; font-weight: 700; margin-bottom: 10px; color: var(--color-outline);">When should this unlock?</label>
+                    <input type="date" id="letterDate" class="w-full p-3 rounded-xl border-3 border-black mb-4">
+                    <textarea id="letterText" placeholder="Dear future me..."></textarea>
+                    <button class="btn-primary" onclick="saveLetter()">📮 Send to Future</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to external JS (if separated) -->
+    <script src="script.js"></script>
+</body>
+</html>
